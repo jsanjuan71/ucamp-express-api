@@ -1,0 +1,75 @@
+{
+    "info": {
+        "_postman_id": "6cc27848-224d-4609-841a-8012bcf9adef",
+        "name": "api de ucamp store",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "description": ""
+    },
+    "item": [
+        {
+            "name": "info de la api",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost:3000/",
+                    "path": [
+                        ""
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                }
+            }
+        },
+        {
+            "name": "obtener producto por sku",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost:3000/products/x2",
+                    "path": [
+                        "products",
+                        "x2"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                }
+            }
+        },
+        {
+            "name": "obtener todos los productos",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost:3000/products",
+                    "query": [
+                        {
+                            "key": "filtro",
+                            "value": "tablet",
+                            "disabled": true
+                        },
+                        {
+                            "key": "fecha",
+                            "value": "2023-07-10",
+                            "disabled": true
+                        }
+                    ],
+                    "variable": [],
+                    "path": [
+                        "products"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                }
+            }
+        }
+    ]
+}
