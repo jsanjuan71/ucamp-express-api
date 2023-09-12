@@ -41,8 +41,8 @@
     "yallist": "^4.0.0"
   },
   "scripts": {
-    "development": "nodemon index.js",
-    "start": "node index.js",
+    "development": "nodemon src/index.js",
+    "start": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
