@@ -1,3 +1,4 @@
+require('dotenv').config()
 /** Importamos el módulo express */
 const express = require('express')
 /** Importamos fs para manejar el file system */
@@ -10,7 +11,8 @@ const app = express()
 app.use( express.json() )
 
 /** Definimos el puerto donde va correr la aplicación */
-const port = 3000
+const port = process.env.PORT 
+
 
 /** En los archivos un enter es equivalete a esto */
 const newLineSymbol = "\r\n"
