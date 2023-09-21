@@ -1,0 +1,114 @@
+// connection string
+mongodb+srv://jsanjuan:ZEsE0zcieuy3oAQU@cluster0.pednkll.mongodb.net/
+
+
+// Seleccionar la base de datos a usar
+use ucamp-store-db-production
+
+// Ver todas las colleciones existentes
+show collections
+
+// Crear una coleccion llamada "vacunas"
+db.createCollection("vacunas")
+
+// Buscar todos los documentos de la colección pets
+db.pets.find()
+
+// Insertar un documento a la colección "pets"
+db.pets.insertOne({
+    "nombre": "donald",
+    "edad": 2,
+    "raza": "pato",
+    "vacunas": [
+      "parvovirus"
+    ],
+    "tipo": "pato"
+})
+
+// Insertar varios documentos a la colección "pets"
+
+db.pets.insertMany([
+    {
+        "nombre": "Rafael",
+        "edad": 20,
+        "raza": "Terrestre",
+        "vacunas": [],
+        "tipo": "tortuga"
+    },
+    {
+        "nombre": "nemo",
+        "edad": 5,
+        "raza": "payaso",
+        "vacunas": [],
+        "tipo": "pez"
+    }
+])
+
+// Buscar a las mascotas que sean de tipo perro
+db.pets.find({tipo: "perro"})
+
+// Buscar a las mascotas que no tienen vacunas, los que su lista de vacunas sea vacia o no la tengan
+db.pets.find({
+    $or : [ 
+        {vacunas: {$size: 0}}, 
+        {vacunas: {$exists: false}} 
+    ] 
+})
+
+// Contar cuantos documentos tiene la colección pets
+db.pets.countDocuments()
+
+// Contar cuantos documentos tiene la colección pets pero solo los que cumplen cierto criterio, por ejemplo cuantos patos hay
+db.pets.countDocuments({tipo: "pato"})
+
+// Obtener una lista de todos los tipos de mascota que tenemos
+db.pets.distinct("tipo")
+
+// obtener una lista de las categorias que tenemos que no esten agotadas 
+// y cada una con la suma total del precio
+db.products_tech.aggregate([ // es una lista, cada objeto dentro es un paso ordenado
+    { // el stage match es el filtro como el find
+        $match: { 
+            $or: [
+                {agotado: false},
+                {agotado: {$exists: false} }
+            ]
+        }
+    },
+    { // el stage group es como vamos a agrupar los documentos ya filtrados
+        $group: { 
+            _id: "$categoria",
+            total: { $sum: "$price" }
+        }
+    },
+    { // finalmente el stage sort para ordenar el resultado ¿
+        $sort: {total: -1}
+    }
+])
+
+// Ordenar todos los documentos de la colección pets
+// los ordena por tipo de manera ascendente
+db.pets.find().sort({tipo: 1})
+
+// los ordena por tipo pero si hay mas de uno de un tipo los ordena por raza de manera ascendente
+db.pets.find().sort({tipo: 1, raza: 1})
+
+// Filtra y ordena los documentos
+db.pets.find("edad.cantidad": {$gte: 4}).sort({tipo: 1, raza: 1})
+
+
+// Actualizar un documento encontraado por su id
+db.pets.updateOne(
+    { _id: ObjectId('650b9f035aec535b2f90ed39')}, 
+    { $set: {nombre: "Yume segundo"} }
+)
+
+// Actualizar un documentos encontrado por su id pero tambien agregar un atributo nuevo
+// en este caso "color" no existía, así que lo crea
+db.pets.updateOne(
+    { _id: ObjectId('650b9f035aec535b2f90ed39')}, 
+    { $set: {nombre: "Yume segundo", color: "café"} }
+)
+
+// Eliminar un documento encontrado por su id
+db.pets.deleteOne({ _id: ObjectId('650b9f035aec535b2f90ed39') })
