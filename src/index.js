@@ -4,11 +4,15 @@ const express = require('express')
 // Importamos el modulo de mongoose
 const mongoose = require('mongoose')
 
+const cors = require('cors')
+
 /** Hacemos el setup de la base de datos */
 require("./config/database.config").setup()
 
 const app = express()
-
+// middleware para permitir conexiones externas // cross-origin resource sharing
+app.use( cors() )
+// middleware para poder recibir datos en formato json en el body de la peticion
 app.use( express.json() )
 
 app.get("/", (request, response) => {

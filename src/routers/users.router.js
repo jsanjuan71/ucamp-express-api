@@ -27,8 +27,26 @@ router.get("/", async(request, response) => {
     }
 })
 
-router.get("/:id", (request, response) => {
-    
+router.get("/:email", async(request, response) => {
+    try {
+        // Invocamos al controller para traer un usuario por email
+        const {error, result} = await userController.getUserByEmail(request.params.email)
+        // Si algo falla devolvemos un error 400 (Bad request)
+        if( error ) {
+            return response.status(400).json({
+                error: result
+            })
+        }
+        //  si todo bien devolvemos un 200 (ok)
+        response.status(200).json({
+            result
+        })
+    } catch (error) {
+        // si algo inesperado ocurre devolvemos un error 500 (internal server error)
+        response.status(500).json({
+            error: error.message
+        })
+    }
 })
 // POST /users/
 router.post("/", async(request, response) => {
@@ -56,8 +74,49 @@ router.post("/", async(request, response) => {
     
 })
 
-router.put("/:id", (request, response) => {})
+router.put("/:email", async(request, response) => {
+    try {
+        // convertimos el age a numero
+        request.body.age = parseInt(request.body.age)
+        // invocamos al controlador para que actualice por email
+        const {error, result} = await userController.updateUserByEmail(request.params.email, request.body)
+        // si hubo error devolvemos un error 400 (Bad request)
+        if( error ) {
+            return response.status(400).json({
+                error: result
+            })
+        }
+        // si todo bien devolvemos un 200 (ok)
+        response.status(200).json({
+            result
+        })
+    } catch (error) {
+        // si algo inesperado ocurre devolvemos un error 500 (internal server error)
+        response.status(500).json({
+            error: error.message
+        })
+    }
+})
 
-router.delete("/:id", (request, response) => {})
+router.delete("/:email", async(request, response) => {
+    try {
+        // Invocamos al controller para borrar usuario por email
+        const {error, result} = await userController.deleteUserByEmail(request.params.email)
+        if( error ) {
+            return response.status(400).json({
+                error: result
+            })
+        }
+        // si todo bien devolvemos un 200 (ok)
+        response.status(200).json({
+            result
+        })
+    } catch (error) {
+        // si algo inesperado ocurre devolvemos un error 500 (internal server error)
+        response.status(500).json({
+            error: error.message
+        })
+    }
+})
 
 module.exports = router
