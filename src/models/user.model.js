@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 
+const crypto = require('crypto')
+
 // definimos el esquema de la coleccion
 const userSchema = new mongoose.Schema({
     firstname: {
@@ -26,9 +28,18 @@ const userSchema = new mongoose.Schema({
         required: [true, "Password is required"],
         minlength: [8, "Password must be at least 8 characters long"]
     },
+    salt: String
 }, {
     timestamps: true //Habilita los campos createdAt y updatedAt
 })
+
+userSchema.methods.encryptPassword = function (passwordWithoutEncryption) {
+    this.salt = crypto.randomBytes(16).toString("hex")
+    
+    this.password = crypto.pbkdf2Sync(passwordWithoutEncryption, this.salt, 10001, 512, "sha512")
+        .toString("hex")
+    
+}
 
 // creamos el modelo con su respectiva estructura
 const User = mongoose.model("User", userSchema)

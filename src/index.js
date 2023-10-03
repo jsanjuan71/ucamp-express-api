@@ -6,6 +6,12 @@ const mongoose = require('mongoose')
 
 const cors = require('cors')
 
+const jwt = require('jsonwebtoken')
+
+const crypto = require('crypto')
+
+const secretKey = process.env.JWT_SECRET    
+
 /** Hacemos el setup de la base de datos */
 require("./config/database.config").setup()
 
@@ -50,6 +56,36 @@ app.get("/mongoose", (request, response) => {
             response.json(error.message)
         })
 
+})
+
+app.post("/token", (request, response) => {
+    
+    const token = jwt.sign({
+        id: 23434,
+        email: "sahj@live.com.mx"
+    }, secretKey)
+
+    response.json({
+        token: token
+    })
+})
+
+app.get("/token/:token", (request, response) => {
+    const token = request.params.token
+    const payload = jwt.verify(token, secretKey)
+    response.json({
+        payload: payload
+    })
+})
+
+app.post("/encrypt", (request, response) => {
+    const salt = "10000"
+    const password = request.body.password
+    const encrypted = crypto.pbkdf2Sync(password, salt, 10000, 512, "sha512")
+        .toString("hex")
+    response.json({encrypted})
+
+    //200.toString(2)  // "11001000"
 })
 
 app.use("/products", require("./routers/products.router"))

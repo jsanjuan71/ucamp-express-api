@@ -13,8 +13,11 @@ const createUser = async (userInfo) => {
             lastname: userInfo.lastname,
             email: userInfo.email,
             age: userInfo.age,
-            password: userInfo.password,
+            password: null,
+            salt: null
         })
+
+        newUser.encryptPassword(userInfo.password)
         // guardamos el usuario en la base de datos
         const userCreated = await newUser.save()
         // regresamos la estructura de error y resultado
