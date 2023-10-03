@@ -1,6 +1,10 @@
 // importamos el modelo de usuario
 const User = require('../models/user.model');
 
+const jwt = require('jsonwebtoken')
+
+const secretKey = process.env.JWT_SECRET
+
 /**
  * @param {Object} userInfo 
  * @returns {boolean, Object} error and result object
@@ -116,10 +120,51 @@ const deleteUserByEmail = async (emailToFind) => {
     }
 }
 
+/**
+ * 
+ * @param {string} email - email del usuario
+ * @param {string} password - password del usuario
+ * @returns - En result regresa el token con la informacion del usuario logueado
+ */
+const login = async (email, password) => {
+    try {
+        // buscamos el usuario por email
+        const user = await User.findOne({email: email})
+        // si no existe el usuario avisamos
+        if( !user ) {
+            throw new Error("User not found")
+        }
+        // validamos el password
+        const passwordMatched = user.validatePassword(password)
+        // si no coincide avisamos
+        if( !passwordMatched ) {
+            throw new Error("Password incorrect")
+        }
+        // creamos el token, como payload mandamos el id y el email
+        const token = jwt.sign({
+            id: user._id,
+            email: user.email
+        }, secretKey)
+        // regresamos el resultado
+        return {
+            error: false,
+            result: token
+        }
+        
+    } catch (error) {
+        // avisamos del error
+        return {
+            error: true,
+            result: error.message
+        }
+    }
+}
+
 module.exports = {
     createUser,
     fetchAllUsers,
     getUserByEmail,
     updateUserByEmail,
-    deleteUserByEmail
+    deleteUserByEmail,
+    login
 }

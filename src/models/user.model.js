@@ -33,12 +33,33 @@ const userSchema = new mongoose.Schema({
     timestamps: true //Habilita los campos createdAt y updatedAt
 })
 
+/**
+ * @param {string} passwordWithoutEncryption - password sin encriptar
+ * @returns {void} - no regresa nada
+ */
 userSchema.methods.encryptPassword = function (passwordWithoutEncryption) {
+    // creamos un salt aleatorio
     this.salt = crypto.randomBytes(16).toString("hex")
-    
+    // encriptamos el password que recibimos como parametro
     this.password = crypto.pbkdf2Sync(passwordWithoutEncryption, this.salt, 10001, 512, "sha512")
         .toString("hex")
     
+}
+
+/**
+ * @param {string} passwordToValidate - password sin encriptar para comparar
+ * @returns  {boolean} - regresa true si el password es correcto, false si no lo es
+ */
+userSchema.methods.validatePassword = function (passwordToValidate) {
+    // si no tenemos salt no podemos comparar
+    if(!this.salt){
+        return false
+    }
+    // encriptamos el password que queremos validar con el salt de la base de datos
+    const encryptedPassword = crypto.pbkdf2Sync(passwordToValidate, this.salt, 10001, 512, "sha512")
+        .toString("hex")
+    // comparamos el password encriptado de la base de datos con el que encriptamos
+    return encryptedPassword === this.password
 }
 
 // creamos el modelo con su respectiva estructura
