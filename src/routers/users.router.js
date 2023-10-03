@@ -74,6 +74,32 @@ router.post("/", async(request, response) => {
     
 })
 
+router.post("/login", async(request, response) => {
+    try {
+        // extraemos el email y password del body
+        const {email, password} = request.body
+        // llamamos al controlador para que haga el login
+        const {error, result} =  await userController.login(email, password)
+        // si hubo error devolvemos un error 400 (Bad request)
+        if( error ) {
+            return response.status(400).json({
+                error: result
+            })
+        }
+        // si todo bien devolvemos un 200 (ok)
+        response.status(200).json({
+            result
+        })
+        
+    } catch (error) {
+        // si algo inesperado ocurre devolvemos un error 500 (internal server error)
+        response.status(500).json({
+            error: error.message
+        })
+    }
+        
+})
+
 router.put("/:email", async(request, response) => {
     try {
         // convertimos el age a numero
