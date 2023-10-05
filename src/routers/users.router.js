@@ -7,13 +7,17 @@ const router = express.Router()
 
 // GET /users/
 router.get("/", auth, async(request, response) => {
-    console.log("USER", request.auth.role)
-    if(request.auth.role !== "admin") {
-        return response.status(401).json({
-            error: "This service is only for admins"
-        })
-    }
     try {
+        // Si se invoca el middleware de autorización, el usuario estará en request.user
+        console.log("Logged user", request.user)
+
+        // Si el usuario no es admin, no puede ver los usuarios
+        if(request.user.role !== "admin") {
+            // interrumpimos la ejecución y devolvemos un error 401 (Unauthorized)
+            return response.status(401).json({
+                error: "This service is only for admins"
+            })
+        }
         // llamamos al controlador para traer todos los usuarios
         const users = await userController.fetchAllUsers()
         // evaluamos si hubo un error y lanzamos un bad request con el error
