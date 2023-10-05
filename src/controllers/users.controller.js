@@ -143,7 +143,8 @@ const login = async (email, password) => {
         // creamos el token, como payload mandamos el id y el email
         const token = jwt.sign({
             id: user._id,
-            email: user.email
+            email: user.email,
+            role: user.role
         }, secretKey)
         // regresamos el resultado
         return {

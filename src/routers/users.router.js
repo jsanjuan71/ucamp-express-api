@@ -1,11 +1,18 @@
 const express = require('express')
 
 const userController = require('../controllers/users.controller')
+const auth = require('../middlewares/authorization')
 
 const router = express.Router()
 
 // GET /users/
-router.get("/", async(request, response) => {
+router.get("/", auth, async(request, response) => {
+    console.log("USER", request.auth.role)
+    if(request.auth.role !== "admin") {
+        return response.status(401).json({
+            error: "This service is only for admins"
+        })
+    }
     try {
         // llamamos al controlador para traer todos los usuarios
         const users = await userController.fetchAllUsers()
