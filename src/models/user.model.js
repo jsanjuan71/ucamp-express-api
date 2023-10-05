@@ -28,7 +28,12 @@ const userSchema = new mongoose.Schema({
         required: [true, "Password is required"],
         minlength: [8, "Password must be at least 8 characters long"]
     },
-    salt: String
+    salt: String,
+    role: {
+        type: String,
+        enum: ["admin", "user", "dev"],
+        default: "user"
+    },
 }, {
     timestamps: true //Habilita los campos createdAt y updatedAt
 })

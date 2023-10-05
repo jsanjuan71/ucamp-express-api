@@ -9,6 +9,7 @@ const cors = require('cors')
 const jwt = require('jsonwebtoken')
 
 const crypto = require('crypto')
+const auth = require('./middlewares/authorization')
 
 const secretKey = process.env.JWT_SECRET    
 
@@ -19,9 +20,11 @@ const app = express()
 // middleware para permitir conexiones externas // cross-origin resource sharing
 app.use( cors() )
 // middleware para poder recibir datos en formato json en el body de la peticion
-app.use( express.json() )
+app.use( express.json() ) // -> request.body
 
-app.get("/", (request, response) => {
+// middleware para verificar el token
+
+app.get("/", auth, (request, response) => {
     response.json({
         name: "Ucamp Express API",
         version: "1.0.0",
