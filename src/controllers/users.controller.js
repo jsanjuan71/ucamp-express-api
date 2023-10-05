@@ -17,6 +17,7 @@ const createUser = async (userInfo) => {
             lastname: userInfo.lastname,
             email: userInfo.email,
             age: userInfo.age,
+            role: userInfo.role,
             password: null,
             salt: null
         })
@@ -44,7 +45,22 @@ const createUser = async (userInfo) => {
 const fetchAllUsers = async () => {
     try {
         // usamos el metodo find para traer todos los usuarios
-        const users = await User.find()
+        // el segundo parametro es para indicar que campos queremos omitir (proyeccion)
+        const users = await User.find({}, {password: 0, salt:0, __v: 0, updatedAt: 0})
+        
+        // esto es para omitir campos de cada usuario si no usamos el segundo parametro de find
+        /*const finalUsers = []
+        users.forEach( (user) => {
+            finalUsers.push({
+                id: user._id,
+                firstname: user.firstname,
+                lastname: user.lastname,
+                email: user.email,
+                age: user.age,
+                role: user.role
+            })
+        })*/
+
         // regresamos la estructura error y resultado
         return {
             error: false,
