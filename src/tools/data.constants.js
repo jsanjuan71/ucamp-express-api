@@ -1,4 +1,4 @@
-const productCategories = ["Generic", "Laptop" , "Mobile" , "Tablet" , "Desktop" , "Camera" , "Printer" , "Accessories" ]
+const productCategories = ["Generic", "Laptop" , "Mobile" , "Tablet" , "Desktop" , "Camera" , "Printer" , "Accessories", "Dron" ]
 
 const userRoles = [ "admin" , "user" , "dev" ]
 

@@ -49,19 +49,8 @@ router.post("/", async(request, response) => {
     }
 })
 
-router.post("/login", async(request, response) => {
-    try {
-        response.status( StatusCodes.NOT_IMPLEMENTED ).json({
-            result: ReasonPhrases.NOT_IMPLEMENTED
-        })
-    } catch (error) {
-        response.status( StatusCodes.INTERNAL_SERVER_ERROR ).json({
-            error: error.message
-        })
-    }   
-})
 
-router.put("/:email", async(request, response) => {
+router.put("/:id", async(request, response) => {
     try {
         response.status( StatusCodes.NOT_IMPLEMENTED ).json({
             result: ReasonPhrases.NOT_IMPLEMENTED
@@ -73,7 +62,7 @@ router.put("/:email", async(request, response) => {
     }
 })
 
-router.delete("/:email", async(request, response) => {
+router.delete("/:id", async(request, response) => {
     try {
         response.status( StatusCodes.NOT_IMPLEMENTED ).json({
             result: ReasonPhrases.NOT_IMPLEMENTED

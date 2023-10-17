@@ -1,10 +1,6 @@
 // importamos el modelo de usuario
 const Product = require('../models/product.model');
 
-const jwt = require('jsonwebtoken')
-
-const secretKey = process.env.JWT_SECRET
-
 /**
  * @param {Object} productInfo 
  * @returns {boolean, Object} error and result object
@@ -43,7 +39,7 @@ const fetchAllProducts = async () => {
     try {
         // usamos el metodo find para traer todos los usuarios
         // el segundo parametro es para indicar que campos queremos omitir (proyeccion)
-        const products = await Product.find({}, {updatedAt: 0})
+        const products = await Product.find({}, {updatedAt: 0, createdAt: 0})
 
         // regresamos la estructura error y resultado
         return {

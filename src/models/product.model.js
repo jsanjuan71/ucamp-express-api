@@ -1,38 +1,50 @@
-const mongoose = require('mongoose')
-
-const { productCategories, defaultValues, modelNames } = require('../tools/data.constants')
+const { productCategories } = require('../tools/data.constants')
 const { getValidationMessage, validationMessages } = require('../tools/messages.constants')
 
-// definimos el esquema de la coleccion
+const mongoose = require('mongoose')
+
+
+/**
+ * title
+ * description
+ * price   
+ * stock
+ * category
+ */
 const productSchema = new mongoose.Schema({
     title: {
         type: String,
-        required: [true, getValidationMessage( validationMessages.required, ["title"] )  ],
-        unique: true,
+        required: [true, getValidationMessage( validationMessages.required, ["Title"]  ) ],
+
     },
     description: {
         type: String,
-        default: defaultValues.noDescription
+        required: false
     },
     price: {
         type: Number,
-        required: [true, getValidationMessage( validationMessages.required, ["price"] )],
+        required: [true, getValidationMessage( validationMessages.required, ["Price"]) ],
+        min: [0, getValidationMessage( validationMessages.min, ["Price", "0"])]
     },
     stock: {
         type: Number,
-        required: false,
-        default: 1
+        required: [true, getValidationMessage( validationMessages.required, ["Stock"]) ],
+        min: [0, getValidationMessage( validationMessages.min, ["Stock", "0"])]
     },
     category: {
         type: String,
         enum: productCategories,
         default: productCategories[0]
-    }
+    },
+    manufacturerDate: {
+        type: Date,
+        required: false
+    },
 }, {
-    timestamps: true //Habilita los campos createdAt y updatedAt
+    timestamps: true // habilita los campos createdAt y updatedAt
 })
 
-// creamos el modelo con su respectiva estructura
-const Product = mongoose.model( modelNames.products , productSchema)
-// exportamos el modelo
+
+const Product = mongoose.model("Product", productSchema)
+
 module.exports = Product

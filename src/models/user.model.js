@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: [true, "Email is required"],
-        unique: true,
+        unique: true
     },
     age: {
         type: Number,
@@ -32,7 +32,6 @@ const userSchema = new mongoose.Schema({
     role: { // admin, user, dev
         type: String,
         enum: ["admin", "user", "dev"], // solo acepta estos valores
-        default: "user" // valor por defecto
     },
 }, {
     timestamps: true //Habilita los campos createdAt y updatedAt
