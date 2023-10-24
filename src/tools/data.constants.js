@@ -10,7 +10,8 @@ const defaultValues = {
 
 const modelNames = {
     products: "Product",
-    users: "User"
+    users: "User",
+    posts: "Post",
 }
 
 module.exports = {
