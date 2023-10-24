@@ -94,6 +94,7 @@ app.post("/encrypt", (request, response) => {
 app.use("/products", require("./routers/products.router"))
 app.use("/pets", require("./routers/pets.router"))
 app.use("/users", require("./routers/users.router")) // agregamos el router de usuarios
+app.use("/posts", require("./routers/posts.router")) // agregamos el router de posts
 
 
 const port = process.env.PORT
